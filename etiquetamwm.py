@@ -46,7 +46,7 @@ def create_label_image(data_fabricacao, part_number, nivel_liberacao, serial_fab
     info_texts = [
         ("Data de Fabricacao:", data_fabricacao.strftime('%d/%m/%Y')),
         ("Part Number MWM:", part_number),
-        ("Nível de Liberacao:", nivel_liberacao),
+        ("Nivel de Liberacao:", nivel_liberacao),
         ("Serial de Fabricacao:", serial_fabricacao),
         ("Identificacao do Fornecedor:", "13785"),
         ("Numero da NF:", nf),

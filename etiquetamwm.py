@@ -33,14 +33,9 @@ def create_label_image(data_fabricacao, part_number, nivel_liberacao, serial_fab
     draw = ImageDraw.Draw(img)
 
     # Carrega fontes
-    font_title = ImageFont.truetype("arial.ttf", 100)
-    font_data = ImageFont.truetype("arial.ttf", 88)
-    font_code = ImageFont.truetype("arial.ttf", 92)
-    
-    # TESTE: Mostra o tamanho real da fonte
-    st.write(f"Tamanho real da fonte (Título): {font_title.getbbox('Teste')}")
-    st.write(f"Tamanho real da fonte (Dados): {font_data.getbbox('Teste')}")
-    st.write(f"Tamanho real da fonte (Código): {font_code.getbbox('Teste')}")
+    font_title = load_font("arialbd.ttf", 100)
+    font_data = load_font("calibri.ttf", 88)
+    font_code = load_font("arialbd.ttf", 92)
 
     # Adiciona o logo
     logo = Image.open(logo_path)

@@ -1,2 +1,1 @@
-libdmtx0a
-libdmtx-dev
+

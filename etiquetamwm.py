@@ -3,25 +3,18 @@ import datetime
 import tempfile
 import os
 from PIL import Image, ImageDraw, ImageFont
-from pylibdmtx.pylibdmtx import encode
+import treepoem
 from reportlab.pdfgen import canvas
 from reportlab.lib.pagesizes import mm
 import sys
 
-# Função para verificar se estamos no Streamlit Cloud
 def is_streamlit_cloud():
     return os.environ.get("STREAMLIT_SERVER_RUNNING") is not None
 
-# Removemos as importações de cups, pois não vamos usá-las
-# import cups
-
 def get_printers():
-    # Se estiver no Streamlit Cloud, não temos acesso a impressoras
     if is_streamlit_cloud():
         st.warning("Impressão direta não é suportada no Streamlit Cloud. Utilize a opção de download do PDF.")
         return None
-    # Se não estiver no Streamlit Cloud, implemente a busca pelas impressoras (por exemplo, via cups)
-    # Exemplo de código para Linux com cups:
     try:
         import cups
         conn = cups.Connection()
@@ -74,10 +67,11 @@ def create_label_image(data_fabricacao, part_number, nivel_liberacao, serial_fab
         y_pos += 45
         draw.text((650, y_pos), value, fill="black", font=font_data)
         y_pos += 65
-    
+
+    # Gera o DataMatrix utilizando treepoem
     dm_data = f"{data_fabricacao.strftime('%d/%m/%Y')};{part_number};{nivel_liberacao};{serial_fabricacao};13785;{nf}"
-    datamatrix = encode(dm_data.encode('utf-8'))
-    dm_img = Image.frombytes('RGB', (datamatrix.width, datamatrix.height), datamatrix.pixels)
+    dm_img = treepoem.generate_barcode(barcode_type="datamatrix", data=dm_data)
+    dm_img = dm_img.convert("RGB")
     dm_img = dm_img.resize((600, 400))
     
     dm_x, dm_y = 5, 200
@@ -85,7 +79,6 @@ def create_label_image(data_fabricacao, part_number, nivel_liberacao, serial_fab
     
     pr020_x = dm_x + dm_img.width // 2
     pr020_y = dm_y + dm_img.height + 20
-    # Utiliza a variável global PR_datamatrix para o código abaixo do DataMatrix
     draw.text((pr020_x, pr020_y), PR_datamatrix, fill="black", font=font_code, anchor="mm")
     
     img = img.rotate(90, expand=True)
@@ -107,7 +100,6 @@ def save_as_pdf(img, quantity):
     return pdf_path
 
 def print_pdf(pdf_path, printer_name):
-    # Esta função só será chamada se o ambiente suportar impressão direta
     try:
         import cups
         conn = cups.Connection()
@@ -116,7 +108,6 @@ def print_pdf(pdf_path, printer_name):
     except Exception as e:
         st.error(f"Erro ao imprimir: {str(e)}")
 
-# Dicionário para preenchimento automático
 dados_mwm = {
     "7000448C93": {"nivel": "A", "serial": "13785", "datamatrix":"PR019"},
     "7000666C93": {"nivel": "A", "serial": "13785", "datamatrix":"PR018"},
@@ -136,7 +127,7 @@ PR_datamatrix = st.text_input("Cod DataMatrix", value=dados_mwm[part_number]["da
 nf = st.text_input("Número da Nota Fiscal (NF):")
 quantidade = st.number_input("Quantidade de Etiquetas:", min_value=1, value=1, step=1)
 
-# Defina o caminho do logo (certifique-se de que o arquivo 'logoPMK.png' esteja no repositório)
+# Certifique-se de que o arquivo "logoPMK.png" esteja no repositório
 logo_path = "logoPMK.png"
 
 if st.button("Visualizar Prévia"):

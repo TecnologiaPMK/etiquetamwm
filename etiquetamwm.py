@@ -33,10 +33,9 @@ def create_label_image(data_fabricacao, part_number, nivel_liberacao, serial_fab
     draw = ImageDraw.Draw(img)
 
     # Carrega fontes
-    font_path = os.path.join(os.getcwd(), "arial.ttf")  # Caminho absoluto
-    font_title = ImageFont.truetype(font_path, 100)
-    font_data = ImageFont.truetype(font_path, 88)
-    font_code = ImageFont.truetype(font_path, 92)
+font_title = ImageFont.load_default()
+font_data = ImageFont.load_default()
+font_code = ImageFont.load_default()
 
     st.write(os.listdir("/usr/share/fonts/truetype"))
 

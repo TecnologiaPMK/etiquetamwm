@@ -33,9 +33,9 @@ def create_label_image(data_fabricacao, part_number, nivel_liberacao, serial_fab
     draw = ImageDraw.Draw(img)
 
     # Carrega fontes
-font_title = ImageFont.load_default()
-font_data = ImageFont.load_default()
-font_code = ImageFont.load_default()
+    font_title = ImageFont.load_default()
+    font_data = ImageFont.load_default()
+    font_code = ImageFont.load_default()
 
     st.write(os.listdir("/usr/share/fonts/truetype"))
 

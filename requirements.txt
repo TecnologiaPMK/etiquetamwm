@@ -1,6 +1,5 @@
 streamlit==1.44.1
 Pillow
-pylibdmtx==0.2.8
 reportlab
 pycups
 pywin32 

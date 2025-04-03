@@ -40,9 +40,9 @@ def create_label_image(data_fabricacao, part_number, nivel_liberacao, serial_fab
                            
     # Adiciona o logo
     logo = Image.open(logo_path)
-    logo = logo.resize((300, 250))
+    logo = logo.resize((600, 350))
     img.paste(logo, (10, 10))
-    y_pos = 80
+    y_pos = 200
 
     # Informações na etiqueta
     info_texts = [
@@ -64,7 +64,7 @@ def create_label_image(data_fabricacao, part_number, nivel_liberacao, serial_fab
     dm_data = f"{data_fabricacao.strftime('%d%m%Y')};{part_number};{nivel_liberacao};{serial_fabricacao};13785;{nf}"
     dm_img = generate_datamatrix(dm_data)
     dm_img = dm_img.resize((1000, 1000))
-    img.paste(dm_img, (-2, 60))
+    img.paste(dm_img, (-2, 100))
 
     # Código PR
     draw.text((105, 280), PR_datamatrix, fill="black", font=font_code, anchor="mm")

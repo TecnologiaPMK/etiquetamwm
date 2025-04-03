@@ -48,7 +48,7 @@ def create_label_image(data_fabricacao, part_number, nivel_liberacao, serial_fab
         ("Part Number MWM:", part_number),
         ("Nível de Liberacao:", nivel_liberacao),
         ("Serial de Fabricacao:", serial_fabricacao),
-        ("Identificação do Fornecedor:", "13785"),
+        ("Identificacao do Fornecedor:", "13785"),
         ("Número da NF:", nf),
     ]
 

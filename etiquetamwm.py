@@ -3,6 +3,7 @@ import datetime
 import tempfile
 import os
 import sys
+import pylibdmtx.pylibdmtx as dmtx  # Biblioteca específica para Data Matrix
 from PIL import Image, ImageDraw, ImageFont
 from reportlab.pdfgen import canvas # type: ignore
 from reportlab.lib.pagesizes import mm # type: ignore
@@ -17,11 +18,10 @@ def load_font(font_name, size):
 
 # Função para gerar o código DataMatrix
 def generate_datamatrix(data):
-    qr = segno.make(data, micro=False)
-    temp_file = tempfile.NamedTemporaryFile(suffix=".png", delete=False)
-    qr.save(temp_file.name, scale=20)
-    img = Image.open(temp_file.name)
-    return img.rotate(0, expand=True)  # Garante que a rotação esteja correta
+    encoded = dmtx.encode(data.encode('utf-8'))
+    img = Image.frombytes('RGB', (encoded.width, encoded.height), encoded.pixels)
+    img = img.convert("L")  # Converte para escala de cinza para melhor compatibilidade
+    return img
 
 
 # Função para criar a imagem da etiqueta

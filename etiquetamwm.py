@@ -70,16 +70,24 @@ def create_label_image(data_fabricacao, part_number, nivel_liberacao, serial_fab
 
 # Função para salvar a etiqueta como PDF
 def save_as_pdf(img, quantity):
-    pdf_path = tempfile.NamedTemporaryFile(suffix=".pdf", delete=False).name
+    pdf_path = "etiqueta_mwm.pdf"  # Nome fixo para o arquivo
+    
+    # Se o arquivo já existir, excluí-lo antes de criar um novo
+    if os.path.exists(pdf_path):
+        os.remove(pdf_path)
+
     c = canvas.Canvas(pdf_path, pagesize=(110*mm, 85*mm))
     img_path = tempfile.NamedTemporaryFile(suffix=".png", delete=False).name
     img.save(img_path, format="PNG")
+    
     for _ in range(quantity):
         c.drawImage(img_path, 0, 0, width=110*mm, height=85*mm)
         c.showPage()
+    
     c.save()
     os.remove(img_path)
-    return pdf_path
+    
+    return pdf_path  # Retorna o caminho do arquivo fixo
 
 # Dados dos Part Numbers
 dados_mwm = {

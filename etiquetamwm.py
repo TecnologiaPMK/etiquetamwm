@@ -65,7 +65,7 @@ def create_label_image(data_fabricacao, part_number, nivel_liberacao, serial_fab
     img.paste(dm_img, (20, 60))
 
     # Código PR
-    draw.text((110, 280), PR_datamatrix, fill="black", font=font_code, anchor="mm")
+    draw.text((120, 280), PR_datamatrix, fill="black", font=font_code, anchor="mm")
     return img
 
 # Função para salvar a etiqueta como PDF

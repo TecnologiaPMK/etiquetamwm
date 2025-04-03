@@ -19,14 +19,14 @@ def load_font(font_name, size):
 def generate_datamatrix(data):
     qr = segno.make(data, micro=False)
     temp_file = tempfile.NamedTemporaryFile(suffix=".png", delete=False)
-    qr.save(temp_file.name, scale=40)
+    qr.save(temp_file.name, scale=50)
     img = Image.open(temp_file.name)
     return img.rotate(0, expand=True)  # Garante que a rotação esteja correta
 
 
 # Função para criar a imagem da etiqueta
 def create_label_image(data_fabricacao, part_number, nivel_liberacao, serial_fabricacao, nf, logo_path, 
-                       dpi=100, PR_datamatrix=""):
+                       dpi=600, PR_datamatrix=""):
     label_width, label_height = 110, 85  # Dimensão da etiqueta em mm
     width_pixels, height_pixels = (int(label_width * dpi / 25.4), int(label_height * dpi / 25.4))
     img = Image.new('RGB', (width_pixels, height_pixels), color='white')
@@ -34,13 +34,13 @@ def create_label_image(data_fabricacao, part_number, nivel_liberacao, serial_fab
 
     # Carrega fontes
     font_path = "/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf"
-    font_title = ImageFont.truetype(font_path, 12)
-    font_data = ImageFont.truetype(font_path, 12)
-    font_code = ImageFont.truetype(font_path, 12)
+    font_title = ImageFont.truetype(font_path, 32)
+    font_data = ImageFont.truetype(font_path, 32)
+    font_code = ImageFont.truetype(font_path, 32)
                            
     # Adiciona o logo
     logo = Image.open(logo_path)
-    logo = logo.resize((150, 50))
+    logo = logo.resize((300, 250))
     img.paste(logo, (10, 10))
     y_pos = 80
 

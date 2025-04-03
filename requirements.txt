@@ -2,5 +2,4 @@ streamlit
 reportlab
 segno
 pylibdmtx
-cv2
-numpy 
+

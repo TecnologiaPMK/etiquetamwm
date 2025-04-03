@@ -2,6 +2,7 @@ import streamlit as st
 import datetime
 import tempfile
 import os
+import webbrowser
 from PIL import Image, ImageDraw, ImageFont
 from reportlab.pdfgen import canvas # type: ignore
 from reportlab.lib.pagesizes import mm # type: ignore
@@ -17,20 +18,20 @@ def load_font(font_name, size):
 def generate_datamatrix(data):
     qr = segno.make(data, micro=False)
     temp_file = tempfile.NamedTemporaryFile(suffix=".png", delete=False)
-    qr.save(temp_file.name, scale=5)
+    qr.save(temp_file.name, scale=10)
     img = Image.open(temp_file.name)
     return img
 
 def create_label_image(data_fabricacao, part_number, nivel_liberacao, serial_fabricacao, nf, logo_path, dpi=300, logo_position=(10, 10), text_offset=-50, PR_datamatrix=""):
     label_width, label_height = 110, 85 # mm (largura x altura na vertical)
-    width_pixels, height_pixels = (int(label_width * dpi / 25.4), int(label_height * dpi / 35.4))
+    width_pixels, height_pixels = (int(label_width * dpi / 25.4), int(label_height * dpi / 25.4))
 
     img = Image.new('RGB', (width_pixels, height_pixels), color='white')
     draw = ImageDraw.Draw(img)
     
-    font_title = load_font("calibri.ttf", 10)
-    font_data = load_font("calibri.ttf", 10)
-    font_code = load_font("calibri.ttf", 10)
+    font_title = load_font("arialbd.ttf", 60)
+    font_data = load_font("calibri.ttf", 55)
+    font_code = load_font("arialbd.ttf", 65)
     
     logo = Image.open(logo_path)
     logo = logo.resize((500, 150))
@@ -54,7 +55,7 @@ def create_label_image(data_fabricacao, part_number, nivel_liberacao, serial_fab
     
     dm_data = f"{data_fabricacao.strftime('%d/%m/%Y')};{part_number};{nivel_liberacao};{serial_fabricacao};13785;{nf}"
     dm_img = generate_datamatrix(dm_data)
-    dm_img = dm_img.resize((500, 400))
+    dm_img = dm_img.resize((600, 400))
 
     dm_x, dm_y = 5, 200
     img.paste(dm_img, (dm_x, dm_y))
@@ -106,8 +107,7 @@ if st.button("Visualizar Prévia"):
     img_preview = create_label_image(data_fabricacao, part_number, nivel_liberacao, serial_fabricacao, nf, logo_path, PR_datamatrix=PR_datamatrix)
     st.image(img_preview, caption="Prévia da Etiqueta", width=500)
 
-if st.button("Salvar como PDF"):
+if st.button("Imprimir PDF"):
     img_pdf = create_label_image(data_fabricacao, part_number, nivel_liberacao, serial_fabricacao, nf, logo_path, PR_datamatrix=PR_datamatrix)
     pdf_path = save_as_pdf(img_pdf, quantidade)
-    with open(pdf_path, "rb") as f:
-        st.download_button(label="Baixar PDF", data=f, file_name="etiqueta.pdf", mime="application/pdf")
+    webbrowser.open(pdf_path)

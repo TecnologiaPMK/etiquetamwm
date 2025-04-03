@@ -9,29 +9,29 @@ from reportlab.lib.pagesizes import mm # type: ignore
 import segno
 import sys
 
-def carregar_fonte(font_name, size):
+def load_font(font_name, size):
     try:
         return ImageFont.truetype(font_name, size)
     except IOError:
         return ImageFont.load_default()
 
-def gerar_datamatrix(data):
+def generate_datamatrix(data):
     qr = segno.make(data, micro=False)
     temp_file = tempfile.NamedTemporaryFile(suffix=".png", delete=False)
     qr.save(temp_file.name, scale=10)
     img = Image.open(temp_file.name)
     return img
 
-def criar_imagem_etiqueta(data_fabricacao, part_number, nivel_liberacao, serial_fabricacao, nf, logo_path, dpi=300, logo_position=(10, 10), text_offset=-50, PR_datamatrix=""):
+def create_label_image(data_fabricacao, part_number, nivel_liberacao, serial_fabricacao, nf, logo_path, dpi=300, logo_position=(10, 10), text_offset=-50, PR_datamatrix=""):
     label_width, label_height = 110, 85 # mm (largura x altura na vertical)
     width_pixels, height_pixels = (int(label_width * dpi / 25.4), int(label_height * dpi / 25.4))
 
     img = Image.new('RGB', (width_pixels, height_pixels), color='white')
     draw = ImageDraw.Draw(img)
     
-    font_title = carregar_fonte("arialbd.ttf", 60)
-    font_data = carregar_fonte("calibri.ttf", 55)
-    font_code = carregar_fonte("arialbd.ttf", 65)
+    font_title = load_font("arialbd.ttf", 60)
+    font_data = load_font("calibri.ttf", 55)
+    font_code = load_font("arialbd.ttf", 65)
     
     logo = Image.open(logo_path)
     logo = logo.resize((500, 150))
@@ -54,7 +54,7 @@ def criar_imagem_etiqueta(data_fabricacao, part_number, nivel_liberacao, serial_
         y_pos += 75
     
     dm_data = f"{data_fabricacao.strftime('%d/%m/%Y')};{part_number};{nivel_liberacao};{serial_fabricacao};13785;{nf}"
-    dm_img = gerar_datamatrix(dm_data)
+    dm_img = generate_datamatrix(dm_data)
     dm_img = dm_img.resize((600, 400))
 
     dm_x, dm_y = 5, 200
@@ -68,11 +68,11 @@ def criar_imagem_etiqueta(data_fabricacao, part_number, nivel_liberacao, serial_
 
     return img
 
-def salvar_como_pdf(img, quantity):
-    pdf_path = os.path.join(tempfile.gettempdir(), "etiqueta_mwm.pdf")
+def save_as_pdf(img, quantity):
+    pdf_path = tempfile.NamedTemporaryFile(suffix=".pdf", delete=False).name
     c = canvas.Canvas(pdf_path, pagesize=(150*mm, 100*mm))
     
-    img_path = os.path.join(tempfile.gettempdir(), "etiqueta_mwm.png")
+    img_path = tempfile.NamedTemporaryFile(suffix=".png", delete=False).name
     img.save(img_path, format="PNG")
     
     for _ in range(quantity):
@@ -80,6 +80,7 @@ def salvar_como_pdf(img, quantity):
         c.showPage()
     
     c.save()
+    os.remove(img_path)
     return pdf_path
 
 dados_mwm = {
@@ -103,10 +104,11 @@ quantidade = st.number_input("Quantidade de Etiquetas:", min_value=1, value=1, s
 logo_path = os.path.join(sys._MEIPASS, "logoPMK.png") if getattr(sys, 'frozen', False) else "logoPMK.png"
 
 if st.button("Visualizar Prévia"):
-    img_preview = criar_imagem_etiqueta(data_fabricacao, part_number, nivel_liberacao, serial_fabricacao, nf, logo_path, PR_datamatrix=PR_datamatrix)
+    img_preview = create_label_image(data_fabricacao, part_number, nivel_liberacao, serial_fabricacao, nf, logo_path, PR_datamatrix=PR_datamatrix)
     st.image(img_preview, caption="Prévia da Etiqueta", width=500)
 
 if st.button("Imprimir PDF"):
-    img_pdf = criar_imagem_etiqueta(data_fabricacao, part_number, nivel_liberacao, serial_fabricacao, nf, logo_path, PR_datamatrix=PR_datamatrix)
-    pdf_path = salvar_como_pdf(img_pdf, quantidade)
-    st.markdown(f'<a href="{pdf_path}" target="_blank">Clique aqui para visualizar/imprimir o PDF</a>', unsafe_allow_html=True)
+    img_pdf = create_label_image(data_fabricacao, part_number, nivel_liberacao, serial_fabricacao, nf, logo_path, PR_datamatrix=PR_datamatrix)
+    pdf_path = save_as_pdf(img_pdf, quantidade)
+    webbrowser.open(pdf_path)
+nomeie as funcoes

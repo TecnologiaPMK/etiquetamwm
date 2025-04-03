@@ -41,7 +41,7 @@ def create_label_image(data_fabricacao, part_number, nivel_liberacao, serial_fab
     # Adiciona o logo
     logo = Image.open(logo_path)
     logo = logo.resize((550, 550))
-    img.paste(logo, (5, 5))
+    img.paste(logo, (100, 100))
     y_pos = 300
 
     # Informações na etiqueta

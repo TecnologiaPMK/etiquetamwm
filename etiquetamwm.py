@@ -104,7 +104,7 @@ logo_path = os.path.join(sys._MEIPASS, "logoPMK.png") if getattr(sys, 'frozen', 
 
 if st.button("Visualizar Prévia"):
     img_preview = create_label_image(data_fabricacao, part_number, nivel_liberacao, serial_fabricacao, nf, logo_path, PR_datamatrix=PR_datamatrix)
-    st.image(img_preview, caption="Prévia da Etiqueta", width=300)
+    st.image(img_preview, caption="Prévia da Etiqueta", width=400)
 
 if st.button("Salvar como PDF"):
     img_pdf = create_label_image(data_fabricacao, part_number, nivel_liberacao, serial_fabricacao, nf, logo_path, PR_datamatrix=PR_datamatrix)

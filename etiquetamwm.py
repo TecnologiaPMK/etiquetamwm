@@ -33,16 +33,15 @@ def create_label_image(data_fabricacao, part_number, nivel_liberacao, serial_fab
     draw = ImageDraw.Draw(img)
 
     # Carrega fontes
-    font_title = load_font("arial.ttf", 100)
+    font_title = load_font("arialbd.ttf", 100)
     font_data = load_font("calibri.ttf", 88)
-    font_code = load_font("arial.ttf", 92)
-
-        # TESTE: Mostra o tamanho real da fonte
+    font_code = load_font("arialbd.ttf", 92)
+    
+    # TESTE: Mostra o tamanho real da fonte
     st.write(f"Tamanho real da fonte (Título): {font_title.getsize('Teste')}")
     st.write(f"Tamanho real da fonte (Dados): {font_data.getsize('Teste')}")
     st.write(f"Tamanho real da fonte (Código): {font_code.getsize('Teste')}")
-                           
-    
+
     # Adiciona o logo
     logo = Image.open(logo_path)
     logo = logo.resize((150, 50))
@@ -61,9 +60,9 @@ def create_label_image(data_fabricacao, part_number, nivel_liberacao, serial_fab
 
     for title, value in info_texts:
         draw.text((250, y_pos), title, fill="black", font=font_title)
-        y_pos += 20
+        y_pos += 40  # Aumentei para evitar sobreposição
         draw.text((250, y_pos), value, fill="black", font=font_data)
-        y_pos += 20
+        y_pos += 40
 
     # Gera o DataMatrix
     dm_data = f"{data_fabricacao.strftime('%d%m%Y')};{part_number};{nivel_liberacao};{serial_fabricacao};13785;{nf}"

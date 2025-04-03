@@ -3,7 +3,7 @@ import datetime
 import tempfile
 import os
 import sys
-from pylibdmtx.pylibdmtx import encode
+import segno
 from PIL import Image, ImageDraw, ImageFont
 from reportlab.pdfgen import canvas # type: ignore
 from reportlab.lib.pagesizes import mm # type: ignore
@@ -18,8 +18,10 @@ def load_font(font_name, size):
 
 # Função para gerar o código DataMatrix
 def generate_datamatrix(data):
-    encoded = encode(data.encode('utf-8'))  # Gera o Data Matrix
-    img = Image.frombytes('L', (encoded.width, encoded.height), encoded.pixels)  # Cria imagem em escala de cinza
+    dm = segno.helpers.make_matrix(data, version=12)  # Força Data Matrix, sem QR Code
+    temp_file = "datamatrix.png"
+    dm.save(temp_file, scale=10, border=0)  # Remove bordas indesejadas
+    img = Image.open(temp_file)
     return img
 
 # Função para criar a imagem da etiqueta

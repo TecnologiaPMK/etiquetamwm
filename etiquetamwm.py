@@ -59,7 +59,7 @@ def create_label_image(data_fabricacao, part_number, nivel_liberacao, serial_fab
         y_pos += 20
 
     # Gera o DataMatrix
-    dm_data = f"{data_fabricacao.strftime('%d/%m/%Y')};{part_number};{nivel_liberacao};{serial_fabricacao};13785;{nf}"
+    dm_data = f"{data_fabricacao.strftime('%d%m%Y')};{part_number};{nivel_liberacao};{serial_fabricacao};13785;{nf}"
     dm_img = generate_datamatrix(dm_data)
     dm_img = dm_img.resize((230, 230))
     img.paste(dm_img, (20, 60))

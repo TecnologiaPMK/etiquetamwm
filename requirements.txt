@@ -2,4 +2,4 @@ streamlit
 reportlab
 segno
 pylibdmtx
-
+pdf2image

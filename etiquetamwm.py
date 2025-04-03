@@ -17,12 +17,11 @@ def load_font(font_name, size):
 
 # Função para gerar o código DataMatrix
 def generate_datamatrix(data):
-    qr = segno.make(data, micro=False)
+    qr = segno.make(data, micro=False, error='H')  # Adiciona maior correção de erro
     temp_file = tempfile.NamedTemporaryFile(suffix=".png", delete=False)
-    qr.save(temp_file.name, scale=20)
+    qr.save(temp_file.name, scale=25)  # Aumentei a escala para melhorar a resolução
     img = Image.open(temp_file.name)
-    return img.rotate(0, expand=True)  # Garante que a rotação esteja correta
-
+    return img.rotate(0, expand=True)
 
 # Função para criar a imagem da etiqueta
 def create_label_image(data_fabricacao, part_number, nivel_liberacao, serial_fabricacao, nf, logo_path, 
@@ -56,7 +55,7 @@ def create_label_image(data_fabricacao, part_number, nivel_liberacao, serial_fab
 
     for title, value in info_texts:
         draw.text((230, y_pos), title, fill="black", font=font_title)
-        y_pos += 20  # Aumentei para evitar sobreposição
+        y_pos += 20  # Evita sobreposição
         draw.text((230, y_pos), value, fill="black", font=font_data)
         y_pos += 20
 
@@ -64,11 +63,14 @@ def create_label_image(data_fabricacao, part_number, nivel_liberacao, serial_fab
     dm_data = f"{data_fabricacao.strftime('%d%m%Y')};{part_number};{nivel_liberacao};{serial_fabricacao};13785;{nf}"
     dm_img = generate_datamatrix(dm_data)
     dm_img = dm_img.resize((230, 230))
-    img.paste(dm_img, (-2, 60))
+    img.paste(dm_img, (10, 120))  # Ajustei a posição para evitar sobreposição
 
     # Código PR
     draw.text((105, 280), PR_datamatrix, fill="black", font=font_code, anchor="mm")
     return img
+
+# Mantive o restante do código igual
+
 
 # Função para salvar a etiqueta como PDF
 def save_as_pdf(img, quantity):

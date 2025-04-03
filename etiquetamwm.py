@@ -146,6 +146,7 @@ if st.button("Visualizar Prévia"):
 if st.button("Salvar como PDF"):
     img_pdf = create_label_image(data_fabricacao, part_number, nivel_liberacao, serial_fabricacao, nf, logo_path)
     pdf_path = save_as_pdf(img_pdf, quantidade)
-    with open(pdf_path, "rb") as f:\n        st.download_button(label="Baixar PDF", data=f, file_name="etiqueta.pdf", mime="application/pdf")
+    with open(pdf_path, "rb") as f:
+    st.download_button(label="Baixar PDF", data=f, file_name="etiqueta.pdf", mime="application/pdf")
 
 if st.button("Imprimir Etiqueta") and printer_name:\n    st.info(\"Impressão direta não está disponível neste ambiente. Por favor, utilize a opção de download do PDF para imprimir localmente.\")  

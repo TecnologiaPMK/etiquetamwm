@@ -3,7 +3,8 @@ import datetime
 import tempfile
 import os
 from PIL import Image, ImageDraw, ImageFont
-import qrcode
+import numpy as np
+import cv2
 from reportlab.pdfgen import canvas # type: ignore
 from reportlab.lib.pagesizes import mm # type: ignore
 import sys
@@ -13,6 +14,13 @@ def load_font(font_name, size):
         return ImageFont.truetype(font_name, size)
     except IOError:
         return ImageFont.load_default()
+
+def generate_datamatrix(data):
+    dm = cv2.barcode_BarcodeGenerator()
+    dm.setType(cv2.barcode_BarcodeType.DATAMATRIX)
+    dm.setData(data)
+    _, datamatrix = dm.generate()
+    return Image.fromarray(datamatrix)
 
 def create_label_image(data_fabricacao, part_number, nivel_liberacao, serial_fabricacao, nf, logo_path, dpi=300, logo_position=(10, 10), text_offset=-50, PR_datamatrix=""):
     label_width, label_height = 110, 85 # mm (largura x altura na vertical)
@@ -46,7 +54,7 @@ def create_label_image(data_fabricacao, part_number, nivel_liberacao, serial_fab
         y_pos += 65
     
     dm_data = f"{data_fabricacao.strftime('%d/%m/%Y')};{part_number};{nivel_liberacao};{serial_fabricacao};13785;{nf}"
-    dm_img = qrcode.make(dm_data)
+    dm_img = generate_datamatrix(dm_data)
     dm_img = dm_img.resize((600, 400))
 
     dm_x, dm_y = 5, 200

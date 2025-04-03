@@ -3,8 +3,6 @@ import datetime
 import tempfile
 import os
 import sys
-import cv2
-import numpy as np
 from pylibdmtx.pylibdmtx import encode
 from PIL import Image, ImageDraw, ImageFont
 from reportlab.pdfgen import canvas # type: ignore
@@ -21,10 +19,8 @@ def load_font(font_name, size):
 # Função para gerar o código DataMatrix
 def generate_datamatrix(data):
     encoded = encode(data.encode('utf-8'))  # Gera o Data Matrix
-    img_array = np.frombuffer(encoded.pixels, dtype=np.uint8).reshape((encoded.height, encoded.width))
-    img = cv2.cvtColor(img_array, cv2.COLOR_GRAY2RGB)  # Converte para RGB
-    return Image.fromarray(img)
-
+    img = Image.frombytes('L', (encoded.width, encoded.height), encoded.pixels)  # Cria imagem em escala de cinza
+    return img
 
 # Função para criar a imagem da etiqueta
 def create_label_image(data_fabricacao, part_number, nivel_liberacao, serial_fabricacao, nf, logo_path, 

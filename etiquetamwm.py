@@ -53,9 +53,9 @@ def create_label_image(data_fabricacao, part_number, nivel_liberacao, serial_fab
     ]
 
     for title, value in info_texts:
-        draw.text((270, y_pos), title, fill="black", font=font_title )
+        draw.text((220, y_pos), title, fill="black", font=font_title )
         y_pos += 10
-        draw.text((270, y_pos), value, fill="black", font=font_data)
+        draw.text((220, y_pos), value, fill="black", font=font_data)
         y_pos += 10
 
     # Gera o DataMatrix

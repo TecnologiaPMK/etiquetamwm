@@ -28,9 +28,9 @@ def create_label_image(data_fabricacao, part_number, nivel_liberacao, serial_fab
     img = Image.new('RGB', (width_pixels, height_pixels), color='white')
     draw = ImageDraw.Draw(img)
     
-    font_title = load_font("arialbd.ttf", 100)
-    font_data = load_font("calibri.ttf", 100)
-    font_code = load_font("arialbd.ttf", 120)
+    font_title = load_font("arialbd.ttf", 40)
+    font_data = load_font("calibri.ttf", 40)
+    font_code = load_font("arialbd.ttf", 50)
     
     logo = Image.open(logo_path)
     logo = logo.resize((500, 150))
@@ -104,7 +104,7 @@ logo_path = os.path.join(sys._MEIPASS, "logoPMK.png") if getattr(sys, 'frozen', 
 
 if st.button("Visualizar Prévia"):
     img_preview = create_label_image(data_fabricacao, part_number, nivel_liberacao, serial_fabricacao, nf, logo_path, PR_datamatrix=PR_datamatrix)
-    st.image(img_preview, caption="Prévia da Etiqueta", width=400)
+    st.image(img_preview, caption="Prévia da Etiqueta", width=500)
 
 if st.button("Salvar como PDF"):
     img_pdf = create_label_image(data_fabricacao, part_number, nivel_liberacao, serial_fabricacao, nf, logo_path, PR_datamatrix=PR_datamatrix)

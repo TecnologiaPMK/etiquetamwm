@@ -10,33 +10,12 @@ import datetime
 def is_streamlit_cloud():
     return os.environ.get("STREAMLIT_SERVER_RUNNING") is not None
 
-def get_printers():
-    if is_streamlit_cloud():
-        st.warning("Impressão direta não é suportada no Streamlit Cloud. Utilize a opção de download do PDF.")
-        return None
-    try:
-        import cups
-        conn = cups.Connection()
-        printers = conn.getPrinters()
-        return list(printers.keys()) if printers else None
-    except Exception as e:
-        st.error(f"Erro ao obter impressoras: {str(e)}")
-        return None
-
-def select_printer():
-    printers = get_printers()
-    if not printers:
-        st.info("Nenhuma impressora disponível ou impressão direta não suportada neste ambiente.")
-        return None
-    return st.selectbox("Selecione a Impressora:", printers)
-
 def create_label_image(data_fabricacao, part_number, nivel_liberacao, serial_fabricacao, nf, logo_path, dpi=300):
     label_width, label_height = 110, 85  # mm
     width_pixels, height_pixels = (int(label_width * dpi / 25.4), int(label_height * dpi / 25.4))
     
     img = Image.new('RGB', (width_pixels, height_pixels), color='white')
     draw = ImageDraw.Draw(img)
-    
     font = ImageFont.load_default()
     
     try:
@@ -73,7 +52,6 @@ def create_label_image(data_fabricacao, part_number, nivel_liberacao, serial_fab
 def save_as_pdf(img, quantity):
     pdf_path = tempfile.NamedTemporaryFile(suffix=".pdf", delete=False).name
     c = canvas.Canvas(pdf_path, pagesize=(150*mm, 100*mm))
-    
     img_path = tempfile.NamedTemporaryFile(suffix=".png", delete=False).name
     img.save(img_path, format="PNG")
     
@@ -85,15 +63,6 @@ def save_as_pdf(img, quantity):
     os.remove(img_path)
     return pdf_path
 
-def print_pdf(pdf_path, printer_name):
-    try:
-        import cups
-        conn = cups.Connection()
-        conn.printFile(printer_name, pdf_path, "Etiqueta", {})
-        st.success("Etiqueta(s) enviada(s) para impressão!")
-    except Exception as e:
-        st.error(f"Erro ao imprimir: {str(e)}")
-
 dados_mwm = {
     "7000448C93": {"nivel": "A", "serial": "13785"},
     "7000666C93": {"nivel": "A", "serial": "13785"},
@@ -102,7 +71,6 @@ dados_mwm = {
 }
 
 st.title("Etiquetas MWM")
-printer_name = select_printer()
 data_fabricacao = st.date_input("Data de Fabricação", datetime.date.today())
 part_number = st.selectbox("Part Number MWM:", list(dados_mwm.keys()))
 
@@ -122,6 +90,3 @@ if st.button("Salvar como PDF"):
     pdf_path = save_as_pdf(img_pdf, quantidade)
     with open(pdf_path, "rb") as f:
         st.download_button(label="Baixar PDF", data=f, file_name="etiqueta.pdf", mime="application/pdf")
-
-if st.button("Imprimir Etiqueta") and printer_name:
-    st.info("Impressão direta não está disponível neste ambiente. Por favor, utilize a opção de download do PDF para imprimir localmente.")

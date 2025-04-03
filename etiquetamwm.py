@@ -19,7 +19,7 @@ def load_font(font_name, size):
 def generate_datamatrix(data):
     qr = segno.make(data, micro=False)
     temp_file = tempfile.NamedTemporaryFile(suffix=".png", delete=False)
-    qr.save(temp_file.name, scale=20)
+    qr.save(temp_file.name, scale=50)
     img = Image.open(temp_file.name)
     return img.rotate(0, expand=True)  # Garante que a rotação esteja correta
 

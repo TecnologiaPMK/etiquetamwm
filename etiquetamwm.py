@@ -29,7 +29,7 @@ def generate_datamatrix(data):
 
 # Função para criar a imagem da etiqueta
 
-def create_label_image(data_fabricacao, part_number, nivel_liberacao, serial_fabricacao, nf, logo_path, dpi=300, logo_position=(10, 10), text_offset=-60, PR_datamatrix=""):
+def create_label_image(data_fabricacao, part_number, nivel_liberacao, serial_fabricacao, nf, logo_path, dpi=600, logo_position=(10, 10), text_offset=-60, PR_datamatrix=""):
     label_width, label_height = 110, 100 # Dimensão da etiqueta em mm
     width_pixels, height_pixels = (int(label_width * dpi / 40), int(label_height * dpi / 40))
 
@@ -37,9 +37,9 @@ def create_label_image(data_fabricacao, part_number, nivel_liberacao, serial_fab
     draw = ImageDraw.Draw(img)
 
      # Carrega as fontes
-    font_title = load_font("arialbd.ttf", 1120)
-    font_data = load_font("calibri.ttf", 1110)
-    font_code = load_font("arialbd.ttf", 1130)
+    font_title = load_font("arialbd.ttf", 120)
+    font_data = load_font("calibri.ttf", 110)
+    font_code = load_font("arialbd.ttf", 130)
     
     # Adiciona o logo à etiqueta
     logo = Image.open(logo_path)

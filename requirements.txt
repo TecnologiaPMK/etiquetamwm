@@ -1,7 +1,3 @@
 streamlit
-segno
-Pillow
 reportlab
-pycups
-pywin32 
-
+segno

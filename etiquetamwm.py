@@ -38,9 +38,9 @@ def create_label_image(data_fabricacao, part_number, nivel_liberacao, serial_fab
     font_code = load_font("arialbd.ttf", 92)
     
     # TESTE: Mostra o tamanho real da fonte
-    st.write(f"Tamanho real da fonte (Título): {font_title.getsize('Teste')}")
-    st.write(f"Tamanho real da fonte (Dados): {font_data.getsize('Teste')}")
-    st.write(f"Tamanho real da fonte (Código): {font_code.getsize('Teste')}")
+    st.write(f"Tamanho real da fonte (Título): {font_title.getbbox('Teste')}")
+    st.write(f"Tamanho real da fonte (Dados): {font_data.getbbox('Teste')}")
+    st.write(f"Tamanho real da fonte (Código): {font_code.getbbox('Teste')}")
 
     # Adiciona o logo
     logo = Image.open(logo_path)

@@ -3,7 +3,7 @@ import datetime
 import tempfile
 import os
 from PIL import Image, ImageDraw, ImageFont
-from pylibdmtx.pylibdmtx import encode
+import qrcode
 from reportlab.pdfgen import canvas # type: ignore
 from reportlab.lib.pagesizes import mm # type: ignore
 import sys
@@ -46,8 +46,7 @@ def create_label_image(data_fabricacao, part_number, nivel_liberacao, serial_fab
         y_pos += 65
     
     dm_data = f"{data_fabricacao.strftime('%d/%m/%Y')};{part_number};{nivel_liberacao};{serial_fabricacao};13785;{nf}"
-    datamatrix = encode(dm_data.encode('utf-8'))
-    dm_img = Image.frombytes('RGB', (datamatrix.width, datamatrix.height), datamatrix.pixels)
+    dm_img = qrcode.make(dm_data)
     dm_img = dm_img.resize((600, 400))
 
     dm_x, dm_y = 5, 200

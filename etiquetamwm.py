@@ -74,7 +74,7 @@ def save_as_pdf(img, quantity):
     pdf_path = tempfile.NamedTemporaryFile(suffix=".pdf", delete=False).name
     c = canvas.Canvas(pdf_path, pagesize=(110*mm, 85*mm))
     img_path = tempfile.NamedTemporaryFile(suffix=".png", delete=False).name
-    img.save(img_path, format="PNG", dpi=(300, 300))  # Salvar com alta resolução
+    img.save(img_path, format="PNG", dpi=(600, 600))  # Salvar com alta resolução
     for _ in range(quantity):
         c.drawImage(img_path, 0, 0, width=110*mm, height=85*mm, preserveAspectRatio=True, anchor='c')
         c.showPage()

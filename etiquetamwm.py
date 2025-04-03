@@ -4,7 +4,7 @@ import tempfile
 import os
 from PIL import Image, ImageDraw, ImageFont
 import numpy as np
-import cv2
+from datamatrix import DataMatrix
 from reportlab.pdfgen import canvas # type: ignore
 from reportlab.lib.pagesizes import mm # type: ignore
 import sys
@@ -16,11 +16,9 @@ def load_font(font_name, size):
         return ImageFont.load_default()
 
 def generate_datamatrix(data):
-    dm = cv2.barcode_BarcodeGenerator()
-    dm.setType(cv2.barcode_BarcodeType.DATAMATRIX)
-    dm.setData(data)
-    _, datamatrix = dm.generate()
-    return Image.fromarray(datamatrix)
+    dm = DataMatrix(data)
+    dm.save("datamatrix.png")
+    return Image.open("datamatrix.png")
 
 def create_label_image(data_fabricacao, part_number, nivel_liberacao, serial_fabricacao, nf, logo_path, dpi=300, logo_position=(10, 10), text_offset=-50, PR_datamatrix=""):
     label_width, label_height = 110, 85 # mm (largura x altura na vertical)

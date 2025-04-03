@@ -69,10 +69,10 @@ def criar_imagem_etiqueta(data_fabricacao, part_number, nivel_liberacao, serial_
     return img
 
 def salvar_como_pdf(img, quantity):
-    pdf_path = tempfile.NamedTemporaryFile(suffix=".pdf", delete=False).name
+    pdf_path = os.path.join(tempfile.gettempdir(), "etiqueta_mwm.pdf")
     c = canvas.Canvas(pdf_path, pagesize=(150*mm, 100*mm))
     
-    img_path = tempfile.NamedTemporaryFile(suffix=".png", delete=False).name
+    img_path = os.path.join(tempfile.gettempdir(), "etiqueta_mwm.png")
     img.save(img_path, format="PNG")
     
     for _ in range(quantity):
@@ -80,7 +80,6 @@ def salvar_como_pdf(img, quantity):
         c.showPage()
     
     c.save()
-    os.remove(img_path)
     return pdf_path
 
 dados_mwm = {
@@ -106,18 +105,9 @@ logo_path = os.path.join(sys._MEIPASS, "logoPMK.png") if getattr(sys, 'frozen', 
 if st.button("Visualizar Prévia"):
     img_preview = criar_imagem_etiqueta(data_fabricacao, part_number, nivel_liberacao, serial_fabricacao, nf, logo_path, PR_datamatrix=PR_datamatrix)
     st.image(img_preview, caption="Prévia da Etiqueta", width=500)
-    
-if st.button("Gerar PDF para Impressão"):
+
+if st.button("Imprimir PDF"):
     img_pdf = criar_imagem_etiqueta(data_fabricacao, part_number, nivel_liberacao, serial_fabricacao, nf, logo_path, PR_datamatrix=PR_datamatrix)
     pdf_path = salvar_como_pdf(img_pdf, quantidade)
-    
-    with open(pdf_path, "rb") as f:
-        pdf_bytes = f.read()
-    
-    st.download_button(
-        label="Baixar PDF",
-        data=pdf_bytes,
-        file_name="etiqueta_mwm.pdf",
-        mime="application/pdf",
-    )
-
+    webbrowser.open(pdf_path)
+    st.success(f"Arquivo salvo em {pdf_path}")

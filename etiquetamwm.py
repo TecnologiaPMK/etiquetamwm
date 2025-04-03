@@ -28,9 +28,9 @@ def create_label_image(data_fabricacao, part_number, nivel_liberacao, serial_fab
     img = Image.new('RGB', (width_pixels, height_pixels), color='white')
     draw = ImageDraw.Draw(img)
     
-    font_title = load_font("arialbd.ttf", 60)
-    font_data = load_font("calibri.ttf", 55)
-    font_code = load_font("arialbd.ttf", 65)
+    font_title = load_font("calibri.ttf", 10)
+    font_data = load_font("calibri.ttf", 10)
+    font_code = load_font("calibri.ttf", 10)
     
     logo = Image.open(logo_path)
     logo = logo.resize((500, 150))
@@ -47,9 +47,9 @@ def create_label_image(data_fabricacao, part_number, nivel_liberacao, serial_fab
     ]
     
     for title, value in info_texts:
-        draw.text((350, y_pos), title, fill="black", font=font_title)
+        draw.text((650, y_pos), title, fill="black", font=font_title)
         y_pos += 55
-        draw.text((350, y_pos), value, fill="black", font=font_data)
+        draw.text((650, y_pos), value, fill="black", font=font_data)
         y_pos += 75
     
     dm_data = f"{data_fabricacao.strftime('%d/%m/%Y')};{part_number};{nivel_liberacao};{serial_fabricacao};13785;{nf}"

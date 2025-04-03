@@ -110,4 +110,7 @@ if st.button("Visualizar Prévia"):
 if st.button("Imprimir PDF"):
     img_pdf = criar_imagem_etiqueta(data_fabricacao, part_number, nivel_liberacao, serial_fabricacao, nf, logo_path, PR_datamatrix=PR_datamatrix)
     pdf_path = salvar_como_pdf(img_pdf, quantidade)
-    webbrowser.open(pdf_path)
+    
+    # Exibir link para abrir o PDF
+    st.markdown(f"[Clique aqui para imprimir](file://{pdf_path})")
+

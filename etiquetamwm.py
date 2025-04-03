@@ -25,48 +25,47 @@ def generate_datamatrix(data):
 
 # Função para criar a imagem da etiqueta
 def create_label_image(data_fabricacao, part_number, nivel_liberacao, serial_fabricacao, nf, logo_path, 
-                       dpi=85, PR_datamatrix=""):
+                       dpi=100, PR_datamatrix=""):
     label_width, label_height = 110, 85  # Dimensão da etiqueta em mm
-    width_pixels, height_pixels = (int(label_width * dpi / 25.8), int(label_height * dpi / 25.8))
+    width_pixels, height_pixels = (int(label_width * dpi / 25.4), int(label_height * dpi / 25.4))
     img = Image.new('RGB', (width_pixels, height_pixels), color='white')
     draw = ImageDraw.Draw(img)
 
     # Carrega fontes
-    font_title = load_font("arialbd.ttf", 35)
-    font_data = load_font("calibri.ttf", 33)
-    font_code = load_font("arialbd.ttf", 37)
+    font_title = load_font("arialbd.ttf", 30)
+    font_data = load_font("calibri.ttf", 28)
+    font_code = load_font("arialbd.ttf", 32)
     
     # Adiciona o logo
     logo = Image.open(logo_path)
     logo = logo.resize((150, 50))
     img.paste(logo, (10, 10))
-    y_pos = 160
+    y_pos = 80
 
     # Informações na etiqueta
     info_texts = [
-        ("Data de Fabricacao:", data_fabricacao.strftime('%d/%m/%Y')),
+        ("Data de Fabricação:", data_fabricacao.strftime('%d/%m/%Y')),
         ("Part Number MWM:", part_number),
-        ("Nível de Liberacao:", nivel_liberacao),
-        ("Serial de Fabricacao:", serial_fabricacao),
+        ("Nível de Liberação:", nivel_liberacao),
+        ("Serial de Fabricação:", serial_fabricacao),
         ("Identificação do Fornecedor:", "13785"),
         ("Número da NF:", nf),
     ]
 
     for title, value in info_texts:
-        draw.text((160,100),info_texts,fill="black"
-        #draw.text((160, y_pos), title, fill="black", font=font_title )
-        #y_pos += 15
-        #draw.text((160, y_pos), value, fill="black", font=font_data)
-        #y_pos += 15
+        draw.text((270, y_pos), title, fill="black", font=font_title)
+        y_pos += 30
+        draw.text((270, y_pos), value, fill="black", font=font_data)
+        y_pos += 20
 
     # Gera o DataMatrix
     dm_data = f"{data_fabricacao.strftime('%d/%m/%Y')};{part_number};{nivel_liberacao};{serial_fabricacao};13785;{nf}"
     dm_img = generate_datamatrix(dm_data)
-    dm_img = dm_img.resize((150, 150))
-    img.paste(dm_img, (2, 60))
+    dm_img = dm_img.resize((200, 200))
+    img.paste(dm_img, (20, 60))
 
     # Código PR
-    draw.text((80, 210), PR_datamatrix, fill="black", font=font_code, anchor="mm")
+    draw.text((100, 320), PR_datamatrix, fill="black", font=font_code, anchor="mm")
     return img
 
 # Função para salvar a etiqueta como PDF

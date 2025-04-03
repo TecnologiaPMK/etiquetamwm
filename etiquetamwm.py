@@ -106,11 +106,18 @@ logo_path = os.path.join(sys._MEIPASS, "logoPMK.png") if getattr(sys, 'frozen', 
 if st.button("Visualizar Prévia"):
     img_preview = criar_imagem_etiqueta(data_fabricacao, part_number, nivel_liberacao, serial_fabricacao, nf, logo_path, PR_datamatrix=PR_datamatrix)
     st.image(img_preview, caption="Prévia da Etiqueta", width=500)
-
-if st.button("Imprimir PDF"):
+    
+if st.button("Gerar PDF para Impressão"):
     img_pdf = criar_imagem_etiqueta(data_fabricacao, part_number, nivel_liberacao, serial_fabricacao, nf, logo_path, PR_datamatrix=PR_datamatrix)
     pdf_path = salvar_como_pdf(img_pdf, quantidade)
     
-    # Exibir link para abrir o PDF
-    st.markdown(f"[Clique aqui para imprimir](file://{pdf_path})")
+    with open(pdf_path, "rb") as f:
+        pdf_bytes = f.read()
+    
+    st.download_button(
+        label="Baixar PDF",
+        data=pdf_bytes,
+        file_name="etiqueta_mwm.pdf",
+        mime="application/pdf",
+    )
 

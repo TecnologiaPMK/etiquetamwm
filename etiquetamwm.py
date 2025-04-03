@@ -25,16 +25,16 @@ def generate_datamatrix(data):
 
 # Função para criar a imagem da etiqueta
 def create_label_image(data_fabricacao, part_number, nivel_liberacao, serial_fabricacao, nf, logo_path, 
-                       dpi=100, PR_datamatrix="",text_offset=-50):
+                       dpi=100, PR_datamatrix=""):
     label_width, label_height = 110, 85  # Dimensão da etiqueta em mm
     width_pixels, height_pixels = (int(label_width * dpi / 25.4), int(label_height * dpi / 25.4))
     img = Image.new('RGB', (width_pixels, height_pixels), color='white')
     draw = ImageDraw.Draw(img)
 
     # Carrega fontes
-    font_title = load_font("arialbd.ttf", 30)
-    font_data = load_font("calibri.ttf", 28)
-    font_code = load_font("arialbd.ttf", 32)
+    font_title = load_font("arialbd.ttf", 35)
+    font_data = load_font("calibri.ttf", 33)
+    font_code = load_font("arialbd.ttf", 37)
     
     # Adiciona o logo
     logo = Image.open(logo_path)
@@ -55,8 +55,8 @@ def create_label_image(data_fabricacao, part_number, nivel_liberacao, serial_fab
     for title, value in info_texts:
         draw.text((270, y_pos), title, fill="black", font=font_title)
         y_pos += 20
-        draw.text((270, y_pos), value, fill="black", font=font_data)
-        y_pos += 10
+        draw.text((2700, y_pos), value, fill="black", font=font_data)
+        y_pos += 20
 
     # Gera o DataMatrix
     dm_data = f"{data_fabricacao.strftime('%d/%m/%Y')};{part_number};{nivel_liberacao};{serial_fabricacao};13785;{nf}"

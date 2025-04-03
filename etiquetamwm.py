@@ -31,15 +31,15 @@ def generate_datamatrix(data):
 
 def create_label_image(data_fabricacao, part_number, nivel_liberacao, serial_fabricacao, nf, logo_path, dpi=300, logo_position=(10, 10), text_offset=-50, PR_datamatrix=""):
     label_width, label_height = 110, 100 # Dimensão da etiqueta em mm
-    width_pixels, height_pixels = (int(label_width * dpi / 25.4), int(label_height * dpi / 25.4))
+    width_pixels, height_pixels = (int(label_width * dpi / 55.4), int(label_height * dpi / 55.4))
 
     img = Image.new('RGB', (width_pixels, height_pixels), color='white')
     draw = ImageDraw.Draw(img)
-    
-    # Carrega as fontes
-    font_title = load_font("arialbd.ttf", 100)
-    font_data = load_font("calibri.ttf", 100)
-    font_code = load_font("arialbd.ttf", 125)
+
+     # Carrega as fontes
+    font_title = load_font("arialbd.ttf", 60)
+    font_data = load_font("calibri.ttf", 55)
+    font_code = load_font("arialbd.ttf", 65)
     
     # Adiciona o logo à etiqueta
     logo = Image.open(logo_path)

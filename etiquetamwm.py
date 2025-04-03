@@ -1,31 +1,12 @@
 import streamlit as st
 import datetime
-import win32print
 import tempfile
 import os
-import win32api
 from PIL import Image, ImageDraw, ImageFont
 from pylibdmtx.pylibdmtx import encode
 from reportlab.pdfgen import canvas # type: ignore
 from reportlab.lib.pagesizes import mm # type: ignore
 import sys
-
-def get_printers():
-    try:
-        printers = [printer[2] for printer in win32print.EnumPrinters(
-            win32print.PRINTER_ENUM_LOCAL | win32print.PRINTER_ENUM_CONNECTIONS
-        )]
-        return printers if printers else None
-    except Exception as e:
-        st.error(f"Erro ao obter impressoras: {str(e)}")
-        return None
-
-def select_printer():
-    printers = get_printers()
-    if not printers:
-        st.warning("Nenhuma impressora encontrada.")
-        return None
-    return st.selectbox("Selecione a Impressora:", printers)
 
 def load_font(font_name, size):
     try:
@@ -95,13 +76,6 @@ def save_as_pdf(img, quantity):
     os.remove(img_path)
     return pdf_path
 
-def print_pdf(pdf_path):
-    try:
-        win32api.ShellExecute(0, "print", pdf_path, None, ".", 0)
-        st.success("Etiqueta(s) enviada(s) para impressão!")
-    except Exception as e:
-        st.error(f"Erro ao imprimir: {str(e)}")
-
 dados_mwm = {
     "7000448C93": {"nivel": "A", "serial": "13785", "datamatrix":"PR019"},
     "7000666C93": {"nivel": "A", "serial": "13785", "datamatrix":"PR018"},
@@ -110,7 +84,6 @@ dados_mwm = {
 }
 
 st.title("Etiquetas MWM")
-printer_name = select_printer()
 data_fabricacao = st.date_input("Data de Fabricação", datetime.date.today())
 part_number = st.selectbox("Part Number MWM:", list(dados_mwm.keys()))
 
@@ -126,3 +99,9 @@ logo_path = os.path.join(sys._MEIPASS, "logoPMK.png") if getattr(sys, 'frozen', 
 if st.button("Visualizar Prévia"):
     img_preview = create_label_image(data_fabricacao, part_number, nivel_liberacao, serial_fabricacao, nf, logo_path, PR_datamatrix=PR_datamatrix)
     st.image(img_preview, caption="Prévia da Etiqueta", width=500)
+
+if st.button("Salvar como PDF"):
+    img_pdf = create_label_image(data_fabricacao, part_number, nivel_liberacao, serial_fabricacao, nf, logo_path, PR_datamatrix=PR_datamatrix)
+    pdf_path = save_as_pdf(img_pdf, quantidade)
+    with open(pdf_path, "rb") as f:
+        st.download_button(label="Baixar PDF", data=f, file_name="etiqueta.pdf", mime="application/pdf")

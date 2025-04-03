@@ -75,7 +75,7 @@ def save_as_pdf(img, quantity):
     img_path = tempfile.NamedTemporaryFile(suffix=".png", delete=False).name
     img.save(img_path, format="PNG")
     for _ in range(quantity):
-        c.drawImage(img_path, 10, 10, width=110*mm, height=85*mm)
+        c.drawImage(img_path, 0, 0, width=110*mm, height=85*mm)
         c.showPage()
     c.save()
     os.remove(img_path)

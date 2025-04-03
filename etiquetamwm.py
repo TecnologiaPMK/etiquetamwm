@@ -111,4 +111,3 @@ if st.button("Imprimir PDF"):
     img_pdf = create_label_image(data_fabricacao, part_number, nivel_liberacao, serial_fabricacao, nf, logo_path, PR_datamatrix=PR_datamatrix)
     pdf_path = save_as_pdf(img_pdf, quantidade)
     webbrowser.open(pdf_path)
-nomeie as funcoes

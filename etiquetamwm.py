@@ -80,7 +80,7 @@ def salvar_como_pdf(img, quantity):
         c.showPage()
     
     c.save()
-    os.startfile(pdf_path)
+    webbrowser.open(pdf_path)
     return pdf_path
 
 dados_mwm = {

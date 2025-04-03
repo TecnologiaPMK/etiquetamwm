@@ -80,6 +80,7 @@ def salvar_como_pdf(img, quantity):
         c.showPage()
     
     c.save()
+    os.startfile(pdf_path)
     return pdf_path
 
 dados_mwm = {
@@ -109,5 +110,4 @@ if st.button("Visualizar Prévia"):
 if st.button("Imprimir PDF"):
     img_pdf = criar_imagem_etiqueta(data_fabricacao, part_number, nivel_liberacao, serial_fabricacao, nf, logo_path, PR_datamatrix=PR_datamatrix)
     pdf_path = salvar_como_pdf(img_pdf, quantidade)
-    webbrowser.open(pdf_path)
-    st.success(f"Arquivo salvo em {pdf_path}")
+    st.success(f"Arquivo salvo e aberto em {pdf_path}")

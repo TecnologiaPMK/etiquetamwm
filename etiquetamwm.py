@@ -5,7 +5,7 @@ import os
 from PIL import Image, ImageDraw, ImageFont
 from reportlab.pdfgen import canvas # type: ignore
 from reportlab.lib.pagesizes import mm # type: ignore
-from reportlab.graphics.barcode import createBarcodeDrawing
+import segno
 import sys
 
 def load_font(font_name, size):
@@ -15,8 +15,11 @@ def load_font(font_name, size):
         return ImageFont.load_default()
 
 def generate_datamatrix(data):
-    barcode = createBarcodeDrawing("DataMatrix", value=data, width=60, height=60)
-    return barcode.asPILImage()
+    qr = segno.make(data, micro=False)
+    temp_file = tempfile.NamedTemporaryFile(suffix=".png", delete=False)
+    qr.save(temp_file.name, scale=10)
+    img = Image.open(temp_file.name)
+    return img
 
 def create_label_image(data_fabricacao, part_number, nivel_liberacao, serial_fabricacao, nf, logo_path, dpi=300, logo_position=(10, 10), text_offset=-50, PR_datamatrix=""):
     label_width, label_height = 110, 85 # mm (largura x altura na vertical)

@@ -17,19 +17,12 @@ def load_font(font_name, size):
 
 # Função para gerar o código DataMatrix
 def generate_datamatrix(data):
-    temp_pdf = tempfile.NamedTemporaryFile(suffix=".pdf", delete=False).name
-    c = canvas.Canvas(temp_pdf, pagesize=(30*mm, 30*mm))  # Tamanho ajustável
-    barcode = dmtx.DataMatrixWidget(data)
-    barcode.drawOn(c, 2*mm, 2*mm)  # Ajusta a posição
-    c.save()
-    
-    # Converter PDF para imagem
-    temp_png = temp_pdf.replace(".pdf", ".png")
-    from pdf2image import convert_from_path
-    pages = convert_from_path(temp_pdf, dpi=300)
-    pages[0].save(temp_png, "PNG")
-    
-    return Image.open(temp_png)
+    qr = segno.make(data, micro=False)
+    temp_file = tempfile.NamedTemporaryFile(suffix=".png", delete=False)
+    qr.save(temp_file.name, scale=20)
+    img = Image.open(temp_file.name)
+    return img.rotate(0, expand=True)  # Garante que a rotação esteja correta
+
 
 # Função para criar a imagem da etiqueta
 def create_label_image(data_fabricacao, part_number, nivel_liberacao, serial_fabricacao, nf, logo_path, 

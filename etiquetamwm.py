@@ -36,7 +36,11 @@ def create_label_image(data_fabricacao, part_number, nivel_liberacao, serial_fab
     font_title = load_font("arial.ttf", 100)
     font_data = load_font("calibri.ttf", 88)
     font_code = load_font("arial.ttf", 92)
-    st.write(f"Tamanho real da fonte: {font_title.getsize('Teste')}")
+
+        # TESTE: Mostra o tamanho real da fonte
+    st.write(f"Tamanho real da fonte (Título): {font_title.getsize('Teste')}")
+    st.write(f"Tamanho real da fonte (Dados): {font_data.getsize('Teste')}")
+    st.write(f"Tamanho real da fonte (Código): {font_code.getsize('Teste')}")
                            
     
     # Adiciona o logo

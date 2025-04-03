@@ -3,8 +3,7 @@ import datetime
 import tempfile
 import os
 from PIL import Image, ImageDraw, ImageFont
-import numpy as np
-from datamatrix import DataMatrix
+import qrcode
 from reportlab.pdfgen import canvas # type: ignore
 from reportlab.lib.pagesizes import mm # type: ignore
 import sys
@@ -16,9 +15,15 @@ def load_font(font_name, size):
         return ImageFont.load_default()
 
 def generate_datamatrix(data):
-    dm = DataMatrix(data)
-    dm.save("datamatrix.png")
-    return Image.open("datamatrix.png")
+    qr = qrcode.QRCode(
+        version=1,
+        error_correction=qrcode.constants.ERROR_CORRECT_H,
+        box_size=10,
+        border=4
+    )
+    qr.add_data(data)
+    qr.make(fit=True)
+    return qr.make_image(fill='black', back_color='white')
 
 def create_label_image(data_fabricacao, part_number, nivel_liberacao, serial_fabricacao, nf, logo_path, dpi=300, logo_position=(10, 10), text_offset=-50, PR_datamatrix=""):
     label_width, label_height = 110, 85 # mm (largura x altura na vertical)

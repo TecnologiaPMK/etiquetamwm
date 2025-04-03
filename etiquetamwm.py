@@ -55,15 +55,15 @@ def create_label_image(data_fabricacao, part_number, nivel_liberacao, serial_fab
     ]
 
     for title, value in info_texts:
-        draw.text((1000, y_pos), title, fill="black", font=font_title)
+        draw.text((1500, y_pos), title, fill="black", font=font_title)
         y_pos += 120  # Aumentei para evitar sobreposição
-        draw.text((1000, y_pos), value, fill="black", font=font_data)
+        draw.text((1500, y_pos), value, fill="black", font=font_data)
         y_pos += 120
 
     # Gera o DataMatrix
     dm_data = f"{data_fabricacao.strftime('%d%m%Y')};{part_number};{nivel_liberacao};{serial_fabricacao};13785;{nf}"
     dm_img = generate_datamatrix(dm_data)
-    dm_img = dm_img.resize((1000, 1000))
+    dm_img = dm_img.resize((1500, 1500))
     img.paste(dm_img, (-2, 700))
 
     # Código PR

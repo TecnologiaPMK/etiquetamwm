@@ -1,6 +1,5 @@
 import streamlit as st
 import datetime
-import cups
 import tempfile
 import os
 from PIL import Image, ImageDraw, ImageFont
@@ -9,8 +8,22 @@ from reportlab.pdfgen import canvas
 from reportlab.lib.pagesizes import mm
 import sys
 
+# Função para verificar se estamos no Streamlit Cloud
+def is_streamlit_cloud():
+    return os.environ.get("STREAMLIT_SERVER_RUNNING") is not None
+
+# Removemos as importações de cups, pois não vamos usá-las
+# import cups
+
 def get_printers():
+    # Se estiver no Streamlit Cloud, não temos acesso a impressoras
+    if is_streamlit_cloud():
+        st.warning("Impressão direta não é suportada no Streamlit Cloud. Utilize a opção de download do PDF.")
+        return None
+    # Se não estiver no Streamlit Cloud, implemente a busca pelas impressoras (por exemplo, via cups)
+    # Exemplo de código para Linux com cups:
     try:
+        import cups
         conn = cups.Connection()
         printers = conn.getPrinters()
         return list(printers.keys()) if printers else None
@@ -21,7 +34,7 @@ def get_printers():
 def select_printer():
     printers = get_printers()
     if not printers:
-        st.warning("Nenhuma impressora encontrada.")
+        st.info("Nenhuma impressora disponível ou impressão direta não suportada neste ambiente.")
         return None
     return st.selectbox("Selecione a Impressora:", printers)
 
@@ -32,7 +45,7 @@ def load_font(font_name, size):
         return ImageFont.load_default()
 
 def create_label_image(data_fabricacao, part_number, nivel_liberacao, serial_fabricacao, nf, logo_path, dpi=300, logo_position=(10, 10), text_offset=-30):
-    label_width, label_height = 110, 85
+    label_width, label_height = 110, 85  # mm
     width_pixels, height_pixels = (int(label_width * dpi / 25.4), int(label_height * dpi / 25.4))
     
     img = Image.new('RGB', (width_pixels, height_pixels), color='white')
@@ -72,6 +85,7 @@ def create_label_image(data_fabricacao, part_number, nivel_liberacao, serial_fab
     
     pr020_x = dm_x + dm_img.width // 2
     pr020_y = dm_y + dm_img.height + 20
+    # Utiliza a variável global PR_datamatrix para o código abaixo do DataMatrix
     draw.text((pr020_x, pr020_y), PR_datamatrix, fill="black", font=font_code, anchor="mm")
     
     img = img.rotate(90, expand=True)
@@ -93,13 +107,16 @@ def save_as_pdf(img, quantity):
     return pdf_path
 
 def print_pdf(pdf_path, printer_name):
+    # Esta função só será chamada se o ambiente suportar impressão direta
     try:
+        import cups
         conn = cups.Connection()
         conn.printFile(printer_name, pdf_path, "Etiqueta", {})
         st.success("Etiqueta(s) enviada(s) para impressão!")
     except Exception as e:
         st.error(f"Erro ao imprimir: {str(e)}")
 
+# Dicionário para preenchimento automático
 dados_mwm = {
     "7000448C93": {"nivel": "A", "serial": "13785", "datamatrix":"PR019"},
     "7000666C93": {"nivel": "A", "serial": "13785", "datamatrix":"PR018"},
@@ -119,6 +136,7 @@ PR_datamatrix = st.text_input("Cod DataMatrix", value=dados_mwm[part_number]["da
 nf = st.text_input("Número da Nota Fiscal (NF):")
 quantidade = st.number_input("Quantidade de Etiquetas:", min_value=1, value=1, step=1)
 
+# Defina o caminho do logo (certifique-se de que o arquivo 'logoPMK.png' esteja no repositório)
 logo_path = "logoPMK.png"
 
 if st.button("Visualizar Prévia"):
@@ -128,10 +146,6 @@ if st.button("Visualizar Prévia"):
 if st.button("Salvar como PDF"):
     img_pdf = create_label_image(data_fabricacao, part_number, nivel_liberacao, serial_fabricacao, nf, logo_path)
     pdf_path = save_as_pdf(img_pdf, quantidade)
-    with open(pdf_path, "rb") as f:
-        st.download_button(label="Baixar PDF", data=f, file_name="etiqueta.pdf", mime="application/pdf")
+    with open(pdf_path, "rb") as f:\n        st.download_button(label="Baixar PDF", data=f, file_name="etiqueta.pdf", mime="application/pdf")
 
-if st.button("Imprimir Etiqueta") and printer_name:
-    img_pdf = create_label_image(data_fabricacao, part_number, nivel_liberacao, serial_fabricacao, nf, logo_path)
-    pdf_path = save_as_pdf(img_pdf, quantidade)
-    print_pdf(pdf_path, printer_name)
+if st.button("Imprimir Etiqueta") and printer_name:\n    st.info(\"Impressão direta não está disponível neste ambiente. Por favor, utilize a opção de download do PDF para imprimir localmente.\")  

@@ -31,7 +31,7 @@ def generate_datamatrix(data):
 
 def create_label_image(data_fabricacao, part_number, nivel_liberacao, serial_fabricacao, nf, logo_path, dpi=600, logo_position=(10, 10), text_offset=-60, PR_datamatrix=""):
     label_width, label_height = 110, 100 # Dimensão da etiqueta em mm
-    width_pixels, height_pixels = (int(label_width * dpi / 40), int(label_height * dpi / 40))
+    width_pixels, height_pixels = (int(label_width * dpi / 25.4), int(label_height * dpi / 25.4))
 
     img = Image.new('RGB', (width_pixels, height_pixels), color='white')
     draw = ImageDraw.Draw(img)

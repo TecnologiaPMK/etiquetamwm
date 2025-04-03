@@ -38,6 +38,8 @@ def create_label_image(data_fabricacao, part_number, nivel_liberacao, serial_fab
     font_data = ImageFont.truetype(font_path, 88)
     font_code = ImageFont.truetype(font_path, 92)
 
+    st.write(os.listdir("/usr/share/fonts/truetype"))
+
     # Adiciona o logo
     logo = Image.open(logo_path)
     logo = logo.resize((150, 50))

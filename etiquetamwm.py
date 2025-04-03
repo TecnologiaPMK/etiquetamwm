@@ -40,7 +40,7 @@ def create_label_image(data_fabricacao, part_number, nivel_liberacao, serial_fab
                            
     # Adiciona o logo
     logo = Image.open(logo_path)
-    logo = logo.resize((600, 450))
+    logo = logo.resize((600, 600))
     img.paste(logo, (10, 10))
     y_pos = 200
 
@@ -56,9 +56,9 @@ def create_label_image(data_fabricacao, part_number, nivel_liberacao, serial_fab
 
     for title, value in info_texts:
         draw.text((1300, y_pos), title, fill="black", font=font_title)
-        y_pos += 120  # Aumentei para evitar sobreposição
+        y_pos += 130  # Aumentei para evitar sobreposição
         draw.text((1300, y_pos), value, fill="black", font=font_data)
-        y_pos += 120
+        y_pos += 130
 
     # Gera o DataMatrix
     dm_data = f"{data_fabricacao.strftime('%d%m%Y')};{part_number};{nivel_liberacao};{serial_fabricacao};13785;{nf}"

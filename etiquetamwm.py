@@ -34,13 +34,13 @@ def create_label_image(data_fabricacao, part_number, nivel_liberacao, serial_fab
 
     # Carrega fontes
     font_path = "/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf"
-    font_title = ImageFont.truetype(font_path, 100)
-    font_data = ImageFont.truetype(font_path, 100)
-    font_code = ImageFont.truetype(font_path, 100)
+    font_title = ImageFont.truetype(font_path, 80)
+    font_data = ImageFont.truetype(font_path, 80)
+    font_code = ImageFont.truetype(font_path, 80)
                            
     # Adiciona o logo
     logo = Image.open(logo_path)
-    logo = logo.resize((600, 350))
+    logo = logo.resize((600, 450))
     img.paste(logo, (10, 10))
     y_pos = 200
 
@@ -67,7 +67,7 @@ def create_label_image(data_fabricacao, part_number, nivel_liberacao, serial_fab
     img.paste(dm_img, (-2, 700))
 
     # Código PR
-    draw.text((200, 480), PR_datamatrix, fill="black", font=font_code, anchor="mm")
+    draw.text((200, 1000), PR_datamatrix, fill="black", font=font_code, anchor="mm")
     return img
 
 

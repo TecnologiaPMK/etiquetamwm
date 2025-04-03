@@ -63,7 +63,7 @@ def create_label_image(data_fabricacao, part_number, nivel_liberacao, serial_fab
     pr020_y = dm_y + dm_img.height + 20
     draw.text((pr020_x, pr020_y), PR_datamatrix, fill="black", font=font_code, anchor="mm")
 
-    #img = img.rotate(90, expand=True)
+    img = img.rotate(90, expand=False)
 
     return img
 

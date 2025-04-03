@@ -34,9 +34,9 @@ def create_label_image(data_fabricacao, part_number, nivel_liberacao, serial_fab
 
     # Carrega fontes
     font_path = "/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf"
-    font_title = ImageFont.truetype(font_path, 132)
-    font_data = ImageFont.truetype(font_path, 132)
-    font_code = ImageFont.truetype(font_path, 132)
+    font_title = ImageFont.truetype(font_path, 100)
+    font_data = ImageFont.truetype(font_path, 100)
+    font_code = ImageFont.truetype(font_path, 100)
                            
     # Adiciona o logo
     logo = Image.open(logo_path)
@@ -56,9 +56,9 @@ def create_label_image(data_fabricacao, part_number, nivel_liberacao, serial_fab
 
     for title, value in info_texts:
         draw.text((230, y_pos), title, fill="black", font=font_title)
-        y_pos += 20  # Aumentei para evitar sobreposição
+        y_pos += 50  # Aumentei para evitar sobreposição
         draw.text((230, y_pos), value, fill="black", font=font_data)
-        y_pos += 20
+        y_pos += 50
 
     # Gera o DataMatrix
     dm_data = f"{data_fabricacao.strftime('%d%m%Y')};{part_number};{nivel_liberacao};{serial_fabricacao};13785;{nf}"

@@ -44,10 +44,10 @@ def create_label_image(data_fabricacao, part_number, nivel_liberacao, serial_fab
 
     # Informações na etiqueta
     info_texts = [
-        ("Data de Fabricação:", data_fabricacao.strftime('%d/%m/%Y')),
+        ("Data de Fabricacao:", data_fabricacao.strftime('%d/%m/%Y')),
         ("Part Number MWM:", part_number),
-        ("Nível de Liberação:", nivel_liberacao),
-        ("Serial de Fabricação:", serial_fabricacao),
+        ("Nível de Liberacao:", nivel_liberacao),
+        ("Serial de Fabricacao:", serial_fabricacao),
         ("Identificação do Fornecedor:", "13785"),
         ("Número da NF:", nf),
     ]
@@ -91,10 +91,10 @@ dados_mwm = {
 
 # Interface Streamlit
 st.title("Etiquetas MWM")
-data_fabricacao = st.date_input("Data de Fabricação", datetime.date.today())
+data_fabricacao = st.date_input("Data de Fabricacao", datetime.date.today())
 part_number = st.selectbox("Part Number MWM:", list(dados_mwm.keys()))
-nivel_liberacao = st.text_input("Nível de Liberação:", value=dados_mwm[part_number]["nivel"])
-serial_fabricacao = st.text_input("Serial de Fabricação:", value=dados_mwm[part_number]["serial"])
+nivel_liberacao = st.text_input("Nível de Liberacao:", value=dados_mwm[part_number]["nivel"])
+serial_fabricacao = st.text_input("Serial de Fabricacao:", value=dados_mwm[part_number]["serial"])
 PR_datamatrix = st.text_input("Cod Datamatrix", value=dados_mwm[part_number]["datamatrix"])
 nf = st.text_input("Número da Nota Fiscal (NF):")
 quantidade = st.number_input("Quantidade de Etiquetas:", min_value=1, value=1, step=1)

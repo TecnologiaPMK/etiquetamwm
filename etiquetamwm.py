@@ -149,4 +149,5 @@ if st.button("Salvar como PDF"):
     with open(pdf_path, "rb") as f:
         st.download_button(label="Baixar PDF", data=f, file_name="etiqueta.pdf", mime="application/pdf")
 
-if st.button("Imprimir Etiqueta") and printer_name:\n    st.info(\"Impressão direta não está disponível neste ambiente. Por favor, utilize a opção de download do PDF para imprimir localmente.\")  
+if st.button("Imprimir Etiqueta") and printer_name:
+    st.info("Impressão direta não está disponível neste ambiente. Por favor, utilize a opção de download do PDF para imprimir localmente.")

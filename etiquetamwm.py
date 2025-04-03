@@ -1,6 +1,6 @@
 import streamlit as st
 import datetime
-#import win32print
+import win32print
 import tempfile
 import os
 import win32api

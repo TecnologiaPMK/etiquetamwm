@@ -29,7 +29,7 @@ def create_label_image(data_fabricacao, part_number, nivel_liberacao, serial_fab
     draw = ImageDraw.Draw(img)
     
     font_title = load_font("arialbd.ttf", 60)
-    font_data = load_font("calibri.ttf", 1055)
+    font_data = load_font("calibri.ttf", 55)
     font_code = load_font("arialbd.ttf", 65)
     
     logo = Image.open(logo_path)

@@ -25,7 +25,7 @@ def generate_datamatrix(data):
 
 # Função para criar a imagem da etiqueta
 def create_label_image(data_fabricacao, part_number, nivel_liberacao, serial_fabricacao, nf, logo_path, 
-                       dpi=110, PR_datamatrix=""):
+                       dpi=80, PR_datamatrix=""):
     label_width, label_height = 110, 85  # Dimensão da etiqueta em mm
     width_pixels, height_pixels = (int(label_width * dpi / 25.8), int(label_height * dpi / 25.4))
     img = Image.new('RGB', (width_pixels, height_pixels), color='white')

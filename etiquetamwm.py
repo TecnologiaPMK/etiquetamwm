@@ -34,9 +34,9 @@ def create_label_image(data_fabricacao, part_number, nivel_liberacao, serial_fab
 
     # Carrega fontes
     font_path = "/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf"
-    font_title = ImageFont.truetype(font_path, 100)
-    font_data = ImageFont.truetype(font_path, 88)
-    font_code = ImageFont.truetype(font_path, 92)
+    font_title = ImageFont.truetype(font_path, 30)
+    font_data = ImageFont.truetype(font_path, 30)
+    font_code = ImageFont.truetype(font_path, 42)
                            
     # Adiciona o logo
     logo = Image.open(logo_path)

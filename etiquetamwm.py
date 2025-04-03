@@ -21,7 +21,7 @@ def generate_datamatrix(data):
     temp_file = tempfile.NamedTemporaryFile(suffix=".png", delete=False)
     qr.save(temp_file.name, scale=10)
     img = Image.open(temp_file.name)
-    return img
+    return img.rotate(0, expand=True)  # Garante que a rotação esteja correta
 
 # Função para criar a imagem da etiqueta
 def create_label_image(data_fabricacao, part_number, nivel_liberacao, serial_fabricacao, nf, logo_path, dpi=300, PR_datamatrix=""):
@@ -31,15 +31,15 @@ def create_label_image(data_fabricacao, part_number, nivel_liberacao, serial_fab
     draw = ImageDraw.Draw(img)
 
     # Carrega fontes
-    font_title = load_font("arialbd.ttf", 80)
-    font_data = load_font("calibri.ttf", 75)
-    font_code = load_font("arialbd.ttf", 85)
+    font_title = load_font("arialbd.ttf", 40)
+    font_data = load_font("calibri.ttf", 38)
+    font_code = load_font("arialbd.ttf", 42)
     
     # Adiciona o logo
     logo = Image.open(logo_path)
-    logo = logo.resize((500, 150))
+    logo = logo.resize((400, 120))
     img.paste(logo, (10, 10))
-    y_pos = 200
+    y_pos = 160
 
     # Informações na etiqueta
     info_texts = [
@@ -52,19 +52,19 @@ def create_label_image(data_fabricacao, part_number, nivel_liberacao, serial_fab
     ]
 
     for title, value in info_texts:
-        draw.text((600, y_pos), title, fill="black", font=font_title)
-        y_pos += 65
-        draw.text((600, y_pos), value, fill="black", font=font_data)
-        y_pos += 85
+        draw.text((450, y_pos), title, fill="black", font=font_title)
+        y_pos += 50
+        draw.text((450, y_pos), value, fill="black", font=font_data)
+        y_pos += 70
 
     # Gera o DataMatrix
     dm_data = f"{data_fabricacao.strftime('%d/%m/%Y')};{part_number};{nivel_liberacao};{serial_fabricacao};13785;{nf}"
     dm_img = generate_datamatrix(dm_data)
-    dm_img = dm_img.resize((600, 600))
-    img.paste(dm_img, (50, 250))
+    dm_img = dm_img.resize((400, 400))
+    img.paste(dm_img, (20, 200))
 
     # Código PR
-    draw.text((350, 870), PR_datamatrix, fill="black", font=font_code, anchor="mm")
+    draw.text((220, 620), PR_datamatrix, fill="black", font=font_code, anchor="mm")
     return img
 
 # Função para salvar a etiqueta como PDF
@@ -102,7 +102,7 @@ logo_path = os.path.join(sys._MEIPASS, "logoPMK.png") if getattr(sys, 'frozen', 
 
 if st.button("Visualizar Prévia"):
     img_preview = create_label_image(data_fabricacao, part_number, nivel_liberacao, serial_fabricacao, nf, logo_path, PR_datamatrix=PR_datamatrix)
-    st.image(img_preview, caption="Prévia da Etiqueta", width=400)
+    st.image(img_preview, caption="Prévia da Etiqueta", width=500)
 
 if st.button("Imprimir PDF"):
     img_pdf = create_label_image(data_fabricacao, part_number, nivel_liberacao, serial_fabricacao, nf, logo_path, PR_datamatrix=PR_datamatrix)

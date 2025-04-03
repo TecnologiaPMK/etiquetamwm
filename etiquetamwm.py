@@ -71,7 +71,7 @@ def create_label_image(data_fabricacao, part_number, nivel_liberacao, serial_fab
 # Função para salvar a etiqueta como PDF
 def save_as_pdf(img, quantity):
     pdf_path = tempfile.NamedTemporaryFile(suffix=".pdf", delete=False).name
-    c = canvas.Canvas(pdf_path, pagesize=(150*mm, 100*mm))
+    c = canvas.Canvas(pdf_path, pagesize=(110*mm, 85*mm))
     img_path = tempfile.NamedTemporaryFile(suffix=".png", delete=False).name
     img.save(img_path, format="PNG")
     for _ in range(quantity):

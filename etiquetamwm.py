@@ -28,9 +28,9 @@ def create_label_image(data_fabricacao, part_number, nivel_liberacao, serial_fab
     img = Image.new('RGB', (width_pixels, height_pixels), color='white')
     draw = ImageDraw.Draw(img)
     
-    font_title = load_font("arialbd.ttf", 40)
-    font_data = load_font("calibri.ttf", 40)
-    font_code = load_font("arialbd.ttf", 50)
+    font_title = load_font("arialbd.ttf", 60)
+    font_data = load_font("calibri.ttf", 55)
+    font_code = load_font("arialbd.ttf", 65)
     
     logo = Image.open(logo_path)
     logo = logo.resize((500, 150))
@@ -48,9 +48,9 @@ def create_label_image(data_fabricacao, part_number, nivel_liberacao, serial_fab
     
     for title, value in info_texts:
         draw.text((650, y_pos), title, fill="black", font=font_title)
-        y_pos += 45
+        y_pos += 55
         draw.text((650, y_pos), value, fill="black", font=font_data)
-        y_pos += 65
+        y_pos += 75
     
     dm_data = f"{data_fabricacao.strftime('%d/%m/%Y')};{part_number};{nivel_liberacao};{serial_fabricacao};13785;{nf}"
     dm_img = generate_datamatrix(dm_data)
@@ -63,7 +63,7 @@ def create_label_image(data_fabricacao, part_number, nivel_liberacao, serial_fab
     pr020_y = dm_y + dm_img.height + 20
     draw.text((pr020_x, pr020_y), PR_datamatrix, fill="black", font=font_code, anchor="mm")
 
-    img = img.rotate(0, expand=False)
+    img = img.rotate(90, expand=True)
 
     return img
 

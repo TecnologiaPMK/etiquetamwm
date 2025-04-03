@@ -75,7 +75,7 @@ def save_as_pdf(img, quantity):
     img_path = tempfile.NamedTemporaryFile(suffix=".png", delete=False).name
     img.save(img_path, format="PNG")
     for _ in range(quantity):
-        c.drawImage(img_path, 0, 0, width=110*mm, height=85*mm)
+        c.drawImage(img_path, 10, 10, width=110*mm, height=85*mm)
         c.showPage()
     c.save()
     os.remove(img_path)
@@ -103,7 +103,7 @@ logo_path = os.path.join(sys._MEIPASS, "logoPMK.png") if getattr(sys, 'frozen', 
 
 if st.button("Visualizar Prévia"):
     img_preview = create_label_image(data_fabricacao, part_number, nivel_liberacao, serial_fabricacao, nf, logo_path, PR_datamatrix=PR_datamatrix)
-    st.image(img_preview, caption="Prévia da Etiqueta", width=600)
+    st.image(img_preview, caption="Prévia da Etiqueta", width=500)
 
 if st.button("Imprimir PDF"):
     img_pdf = create_label_image(data_fabricacao, part_number, nivel_liberacao, serial_fabricacao, nf, logo_path, PR_datamatrix=PR_datamatrix)

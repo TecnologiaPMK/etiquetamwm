@@ -93,6 +93,7 @@ dados_mwm = {
     "7000666C93": {"nivel": "A", "serial": "636", "datamatrix":"PR018"},
     "961201150166": {"nivel": "A", "serial": "636", "datamatrix":"PR020"},
     "7000449C3": {"nivel": "A", "serial": "636", "datamatrix":"PR023"},
+    "7000449C3": {"nivel": "A", "serial": "636", "datamatrix":"PR025"}
 }
 
 # Interface Streamlit
